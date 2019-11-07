@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,13 +11,14 @@ namespace SpotifyRecommendations
     class NewsApi
     {
         public static HttpClient Client = new HttpClient();
-        static async Task<SearchResults> SearchByKeyword(string keyword)
+        public static async Task<SearchResults> SearchByKeyword(string keyword)
         {
             return await Task.Run(async() => {
 
                 try
                 {
-                    var html = await Client.GetStringAsync("https://newsapi.org/v2/everything?q=" + keyword + "&from=2019-10-02&sortBy=publishedAt&apiKey=8603f409c02a4b9ea1cd2193e56ad9e2");
+                    var html = await Client.GetStringAsync("https://newsapi.org/v2/everything?q=" + keyword + "&from=" + DateTime.UtcNow.ToString("YYYY-MM-DD") + "&sortBy=publishedAt&apiKey=8603f409c02a4b9ea1cd2193e56ad9e2");
+                    Debug.WriteLine(html);
                     var results = JsonConvert.DeserializeObject<SearchResults>(html);
                     return results;
                 }

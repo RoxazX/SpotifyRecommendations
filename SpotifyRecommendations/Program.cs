@@ -10,7 +10,6 @@ namespace SpotifyRecommendations
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
@@ -36,8 +35,20 @@ namespace SpotifyRecommendations
                         AccessToken = payload.AccessToken
                     };
                     // Do requests with API client
-                    var results = await api.SearchItemsAsync("drake", SearchType.All);
-                    Debug.WriteLine(JsonConvert.SerializeObject(results));
+                    var newsapiresults = await NewsApi.SearchByKeyword("bitcoin");
+                    if (newsapiresults == null)
+                        return;
+                    Debug.WriteLine(newsapiresults);
+                    Debug.WriteLine(newsapiresults.totalResults);
+                    foreach (var result in newsapiresults.articles)
+                    {
+                        Debug.WriteLine(result.description);
+                    }
+                    var spotifyresults = await api.SearchItemsAsync("drake", SearchType.All);
+                    if (spotifyresults == null)
+                        return;
+
+                   
                 };
                 auth.Start(); // Starts an internal HTTP Server
                 auth.OpenBrowser();
